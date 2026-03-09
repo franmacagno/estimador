@@ -4,75 +4,98 @@ import { Calculator, ArrowRight, Home, Building2, Ruler, Star } from "lucide-rea
 import CostCalculator from "@/components/CostCalculator";
 
 const Index = () => {
-  const [showCalculator, setShowCalculator] = useState(false);
-  const calculatorRef = useRef<HTMLDivElement>(null);
+  const [showResult, setShowResult] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
 
-  const handleStartCalculating = () => {
-    setShowCalculator(true);
+  const scrollToResult = () => {
     setTimeout(() => {
-      calculatorRef.current?.scrollIntoView({ behavior: "smooth" });
+      resultRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-5 max-w-5xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-2">
           <Home className="h-5 w-5 text-primary" />
           <span className="font-heading text-lg font-bold text-foreground">BuildCost</span>
         </div>
+        <div className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1">
+          <Calculator className="h-3.5 w-3.5 text-accent-foreground" />
+          <span className="text-xs font-medium text-accent-foreground">Estimación gratuita</span>
+        </div>
       </nav>
 
-      {/* Hero */}
-      <section className="flex flex-col items-center justify-center text-center px-6 pt-20 pb-16 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 mb-8">
-          <Calculator className="h-4 w-4 text-accent-foreground" />
-          <span className="text-sm font-medium text-accent-foreground">Estimación gratuita en 2 minutos</span>
+      {/* Hero + Calculator in first viewport */}
+      <section className="max-w-6xl mx-auto px-6 pt-8 pb-16">
+        <div className="flex flex-col lg:flex-row gap-10 items-start">
+          {/* Left: Hero text */}
+          <div className="flex-1 pt-4 lg:pt-12">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.1] mb-5 font-heading">
+              Calculá el costo de construir tu casa
+            </h1>
+            <p className="text-base text-muted-foreground max-w-md mb-8">
+              Configurá tu casa en 2 minutos y obtené un costo estimado de construcción.
+            </p>
+
+            {/* Mini feature list */}
+            <div className="space-y-4 mb-8">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
+                  <Ruler className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Configurá los m²</p>
+                  <p className="text-xs text-muted-foreground">Tamaño y características de tu casa</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
+                  <Building2 className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Elegí el tipo de obra</p>
+                  <p className="text-xs text-muted-foreground">Tradicional o Steel Frame</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
+                  <Star className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Obtené tu presupuesto</p>
+                  <p className="text-xs text-muted-foreground">Estimación al instante</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Decorative house */}
+            <div className="hidden lg:block">
+              <div className="w-40 h-40 relative ml-8">
+                <div className="absolute inset-0 bg-primary/10 rounded-3xl rotate-6" />
+                <div className="absolute inset-2 bg-primary/15 rounded-2xl -rotate-3" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg width="80" height="80" viewBox="0 0 100 100" fill="none" className="drop-shadow-sm">
+                    <rect x="20" y="45" width="60" height="40" rx="4" className="fill-primary/20 stroke-primary" strokeWidth="2"/>
+                    <polygon points="50,15 85,45 15,45" className="fill-primary/15 stroke-primary" strokeWidth="2" strokeLinejoin="round"/>
+                    <rect x="40" y="60" width="16" height="25" rx="2" className="fill-primary/30 stroke-primary" strokeWidth="1.5"/>
+                    <rect x="25" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5"/>
+                    <rect x="62" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Calculator form */}
+          <div className="w-full lg:w-[460px] flex-shrink-0">
+            <CostCalculator onResult={() => { setShowResult(true); scrollToResult(); }} resultRef={resultRef} />
+          </div>
         </div>
-
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
-          Calculá el costo de construir tu casa
-        </h1>
-
-        <p className="text-lg text-muted-foreground max-w-xl mb-10">
-          Configurá tu casa en 2 minutos y obtené un costo estimado de construcción.
-        </p>
-
-        <Button size="lg" className="text-base px-8 py-6 gap-2" onClick={handleStartCalculating}>
-          Comenzar a calcular
-          <ArrowRight className="h-4 w-4" />
-        </Button>
       </section>
 
-      {/* Feature cards */}
-      <section className="max-w-4xl mx-auto px-6 pb-20">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          <div className="bg-card border border-border rounded-2xl p-6 text-center">
-            <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mx-auto mb-4">
-              <Ruler className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="font-heading font-semibold text-card-foreground mb-2">Configurá los m²</h3>
-            <p className="text-sm text-muted-foreground">Indicá el tamaño y las características de tu futura casa.</p>
-          </div>
-          <div className="bg-card border border-border rounded-2xl p-6 text-center">
-            <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mx-auto mb-4">
-              <Building2 className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="font-heading font-semibold text-card-foreground mb-2">Elegí el tipo de obra</h3>
-            <p className="text-sm text-muted-foreground">Tradicional o Steel Frame, con distintos niveles de terminación.</p>
-          </div>
-          <div className="bg-card border border-border rounded-2xl p-6 text-center">
-            <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mx-auto mb-4">
-              <Star className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="font-heading font-semibold text-card-foreground mb-2">Obtené tu presupuesto</h3>
-            <p className="text-sm text-muted-foreground">Recibí una estimación al instante y compará opciones.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Decorative illustration section */}
+      {/* Why estimate section */}
       <section className="max-w-4xl mx-auto px-6 pb-20">
         <div className="bg-accent/50 border border-border rounded-3xl p-10 flex flex-col md:flex-row items-center gap-8">
           <div className="flex-1">
@@ -86,8 +109,7 @@ const Index = () => {
               <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" /> Evitá sorpresas en el presupuesto</li>
             </ul>
           </div>
-          {/* Abstract house illustration with CSS shapes */}
-          <div className="flex-shrink-0 w-48 h-48 relative">
+          <div className="flex-shrink-0 w-48 h-48 relative lg:hidden">
             <div className="absolute inset-0 bg-primary/10 rounded-3xl rotate-6" />
             <div className="absolute inset-2 bg-primary/15 rounded-2xl -rotate-3" />
             <div className="absolute inset-0 flex items-center justify-center">
@@ -102,13 +124,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Calculator */}
-      {showCalculator && (
-        <div ref={calculatorRef}>
-          <CostCalculator />
-        </div>
-      )}
 
       {/* Footer */}
       <footer className="text-center py-12 text-sm text-muted-foreground">
