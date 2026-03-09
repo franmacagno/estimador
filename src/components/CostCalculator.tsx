@@ -42,21 +42,21 @@ const CostCalculator = () => {
   };
 
   const formatCurrency = (n: number) =>
-    "$" + n.toLocaleString("en-US");
+    "$" + n.toLocaleString("es-AR");
 
   return (
     <section className="px-6 pb-20 max-w-xl mx-auto">
       <div className="bg-card rounded-2xl border border-border p-8 shadow-sm">
         <h2 className="text-2xl font-bold text-card-foreground mb-6 text-center font-heading">
-          Configure your house
+          Configurá tu casa
         </h2>
 
         <div className="space-y-5">
           <div>
-            <Label htmlFor="location">Location</Label>
+            <Label htmlFor="location">Ubicación</Label>
             <Input
               id="location"
-              placeholder="e.g. Buenos Aires, Argentina"
+              placeholder="Ej: Buenos Aires, Argentina"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="mt-1.5"
@@ -64,11 +64,11 @@ const CostCalculator = () => {
           </div>
 
           <div>
-            <Label htmlFor="sqm">Square meters</Label>
+            <Label htmlFor="sqm">Metros cuadrados</Label>
             <Input
               id="sqm"
               type="number"
-              placeholder="e.g. 120"
+              placeholder="Ej: 120"
               value={sqm}
               onChange={(e) => setSqm(e.target.value)}
               className="mt-1.5"
@@ -76,37 +76,37 @@ const CostCalculator = () => {
           </div>
 
           <div>
-            <Label>Construction type</Label>
+            <Label>Tipo de construcción</Label>
             <Select value={constructionType} onValueChange={setConstructionType}>
               <SelectTrigger className="mt-1.5">
-                <SelectValue placeholder="Select type" />
+                <SelectValue placeholder="Seleccionar tipo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="traditional">Traditional</SelectItem>
+                <SelectItem value="traditional">Tradicional</SelectItem>
                 <SelectItem value="steel">Steel Frame</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <Label>Finishing level</Label>
+            <Label>Nivel de terminación</Label>
             <Select value={finishing} onValueChange={setFinishing}>
               <SelectTrigger className="mt-1.5">
-                <SelectValue placeholder="Select finishing" />
+                <SelectValue placeholder="Seleccionar terminación" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="basic">Basic</SelectItem>
-                <SelectItem value="standard">Standard</SelectItem>
+                <SelectItem value="basic">Básico</SelectItem>
+                <SelectItem value="standard">Estándar</SelectItem>
                 <SelectItem value="premium">Premium</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <Label>Number of bedrooms</Label>
+            <Label>Cantidad de dormitorios</Label>
             <Select value={bedrooms} onValueChange={setBedrooms}>
               <SelectTrigger className="mt-1.5">
-                <SelectValue placeholder="Select bedrooms" />
+                <SelectValue placeholder="Seleccionar dormitorios" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="1">1</SelectItem>
@@ -118,7 +118,7 @@ const CostCalculator = () => {
           </div>
 
           <Button className="w-full py-6 text-base mt-2" onClick={handleCalculate}>
-            Calculate cost
+            Calcular costo
           </Button>
         </div>
       </div>
@@ -126,20 +126,20 @@ const CostCalculator = () => {
       {result && (
         <div className="bg-card rounded-2xl border border-border p-8 shadow-sm mt-6 text-center">
           <h3 className="text-xl font-bold text-card-foreground mb-6 font-heading">
-            Estimated construction cost
+            Costo estimado de construcción
           </h3>
 
           <div className="grid grid-cols-3 gap-4 mb-8">
             <div className="bg-muted rounded-xl p-4">
-              <p className="text-sm text-muted-foreground mb-1">House size</p>
+              <p className="text-sm text-muted-foreground mb-1">Tamaño</p>
               <p className="text-xl font-bold text-foreground">{result.sqm} m²</p>
             </div>
             <div className="bg-muted rounded-xl p-4">
-              <p className="text-sm text-muted-foreground mb-1">Price per m²</p>
+              <p className="text-sm text-muted-foreground mb-1">Precio por m²</p>
               <p className="text-xl font-bold text-foreground">{formatCurrency(result.pricePerSqm)}</p>
             </div>
             <div className="bg-accent rounded-xl p-4">
-              <p className="text-sm text-muted-foreground mb-1">Total cost</p>
+              <p className="text-sm text-muted-foreground mb-1">Costo total</p>
               <p className="text-xl font-bold text-accent-foreground">{formatCurrency(result.total)}</p>
             </div>
           </div>
@@ -147,11 +147,11 @@ const CostCalculator = () => {
           <div className="flex gap-3">
             <Button variant="outline" className="flex-1 gap-2">
               <Users className="h-4 w-4" />
-              Compare architects
+              Comparar arquitectos
             </Button>
             <Button variant="outline" className="flex-1 gap-2">
               <Download className="h-4 w-4" />
-              Download estimate
+              Descargar estimación
             </Button>
           </div>
         </div>
