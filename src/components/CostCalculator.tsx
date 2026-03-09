@@ -120,6 +120,49 @@ const CostCalculator = () => {
             </Select>
           </div>
 
+          <div>
+            <Label>Cantidad de baños</Label>
+            <Select value={bathrooms} onValueChange={setBathrooms}>
+              <SelectTrigger className="mt-1.5">
+                <SelectValue placeholder="Seleccionar baños" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1</SelectItem>
+                <SelectItem value="2">2</SelectItem>
+                <SelectItem value="3">3</SelectItem>
+                <SelectItem value="4">4+</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label>Cocina</Label>
+            <Select value={kitchen} onValueChange={setKitchen}>
+              <SelectTrigger className="mt-1.5">
+                <SelectValue placeholder="Seleccionar tipo de cocina" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="sin-isla">Sin isla</SelectItem>
+                <SelectItem value="con-isla">Con isla</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label>Cochera (cantidad de autos)</Label>
+            <Select value={garage} onValueChange={setGarage}>
+              <SelectTrigger className="mt-1.5">
+                <SelectValue placeholder="Seleccionar cochera" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0">Sin cochera</SelectItem>
+                <SelectItem value="1">1 auto</SelectItem>
+                <SelectItem value="2">2 autos</SelectItem>
+                <SelectItem value="3">3+ autos</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <Button className="w-full py-6 text-base mt-2" onClick={handleCalculate}>
             Calcular costo
           </Button>
