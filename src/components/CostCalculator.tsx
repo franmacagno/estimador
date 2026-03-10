@@ -16,6 +16,7 @@ interface Result {
   pricePerSqm: number;
   total: number;
   months: number;
+  mode: "m2" | "presupuesto";
 }
 
 interface Props {
@@ -36,28 +37,36 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [garage, setGarage] = useState("");
   const [result, setResult] = useState<Result | null>(null);
 
-  const handleCalculate = () => {
-    const area = parseFloat(sqm);
-    if (!area || area <= 0) return;
-
+  const getPrice = () => {
     let price = 750;
     if (constructionType === "steel") price = 700;
     if (finishing === "premium") price *= 1.2;
     if (finishing === "basic") price *= 0.9;
+    return price;
+  };
 
-    // Time estimation (months)
-    // Base: ~1 month per 15m². Steel frame is ~30% faster.
+  const getMonths = (area: number) => {
     let months = Math.ceil(area / 15);
     if (constructionType === "steel") months = Math.ceil(months * 0.7);
     if (finishing === "premium") months = Math.ceil(months * 1.2);
-    months = Math.max(4, months); // minimum 4 months
+    return Math.max(4, months);
+  };
 
-    setResult({
-      sqm: area,
-      pricePerSqm: Math.round(price),
-      total: Math.round(area * price),
-      months,
-    });
+  const handleCalculate = () => {
+    const price = getPrice();
+
+    if (modoCalculo === "m2") {
+      const area = parseFloat(sqm);
+      if (!area || area <= 0) return;
+      setResult({ sqm: area, pricePerSqm: Math.round(price), total: Math.round(area * price), months: getMonths(area), mode: "m2" });
+    } else if (modoCalculo === "presupuesto") {
+      const totalBudget = parseFloat(budget);
+      if (!totalBudget || totalBudget <= 0) return;
+      const area = Math.floor(totalBudget / price);
+      setResult({ sqm: area, pricePerSqm: Math.round(price), total: Math.round(totalBudget), months: getMonths(area), mode: "presupuesto" });
+    } else {
+      return;
+    }
     onResult?.();
   };
 
@@ -72,6 +81,19 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
         </h2>
 
         <div className="space-y-4">
+          <div>
+            <Label className="text-xs">Modo de cálculo</Label>
+            <Select value={modoCalculo} onValueChange={setModoCalculo}>
+              <SelectTrigger className="mt-1 h-9 text-sm">
+                <SelectValue placeholder="Seleccionar" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="m2">Por metros cuadrados</SelectItem>
+                <SelectItem value="presupuesto">Por presupuesto</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div>
               <Label htmlFor="location" className="text-xs">Ubicación</Label>
@@ -83,17 +105,31 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                 className="mt-1 h-9 text-sm"
               />
             </div>
-            <div>
-              <Label htmlFor="sqm" className="text-xs">Metros cuadrados</Label>
-              <Input
-                id="sqm"
-                type="number"
-                placeholder="Ej: 120"
-                value={sqm}
-                onChange={(e) => setSqm(e.target.value)}
-                className="mt-1 h-9 text-sm"
-              />
-            </div>
+            {modoCalculo === "presupuesto" ? (
+              <div>
+                <Label htmlFor="budget" className="text-xs">Presupuesto ($)</Label>
+                <Input
+                  id="budget"
+                  type="number"
+                  placeholder="Ej: 90000"
+                  value={budget}
+                  onChange={(e) => setBudget(e.target.value)}
+                  className="mt-1 h-9 text-sm"
+                />
+              </div>
+            ) : (
+              <div>
+                <Label htmlFor="sqm" className="text-xs">Metros cuadrados</Label>
+                <Input
+                  id="sqm"
+                  type="number"
+                  placeholder="Ej: 120"
+                  value={sqm}
+                  onChange={(e) => setSqm(e.target.value)}
+                  className="mt-1 h-9 text-sm"
+                />
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -193,12 +229,14 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
       {result && (
         <div ref={resultRef} className="bg-card rounded-2xl border border-border p-6 shadow-sm mt-5 text-center">
           <h3 className="text-lg font-bold text-card-foreground mb-5 font-heading">
-            Costo estimado de construcción
+            {result.mode === "presupuesto" ? "Metros cuadrados posibles" : "Costo estimado de construcción"}
           </h3>
 
           <div className="grid grid-cols-2 gap-3 mb-3">
             <div className="bg-muted rounded-xl p-4">
-              <p className="text-xs text-muted-foreground mb-1">Tamaño</p>
+              <p className="text-xs text-muted-foreground mb-1">
+                {result.mode === "presupuesto" ? "m² posibles" : "Tamaño"}
+              </p>
               <p className="text-lg font-bold text-foreground">{result.sqm} m²</p>
             </div>
             <div className="bg-muted rounded-xl p-4">
@@ -209,7 +247,9 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
           <div className="grid grid-cols-2 gap-3 mb-5">
             <div className="bg-accent rounded-xl p-4">
-              <p className="text-xs text-muted-foreground mb-1">Costo total</p>
+              <p className="text-xs text-muted-foreground mb-1">
+                {result.mode === "presupuesto" ? "Presupuesto" : "Costo total"}
+              </p>
               <p className="text-lg font-bold text-accent-foreground">{formatCurrency(result.total)}</p>
             </div>
             <div className="bg-accent rounded-xl p-4">
