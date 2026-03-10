@@ -26,7 +26,7 @@ interface Props {
 
 const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [modoCalculo, setModoCalculo] = useState("");
-  const [location, setLocation] = useState("");
+  
   const [sqm, setSqm] = useState("");
   const [budget, setBudget] = useState("");
   
