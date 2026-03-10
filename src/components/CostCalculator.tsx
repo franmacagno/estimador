@@ -183,7 +183,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
           </div>
 
           <Button className="w-full py-5 text-sm mt-1" onClick={handleCalculate}>
-            Calcular costo
+            Ver costo estimado
           </Button>
         </div>
       </div>
