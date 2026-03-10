@@ -187,7 +187,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                   <SelectItem value="0">Sin cochera</SelectItem>
                   <SelectItem value="1">1 auto</SelectItem>
                   <SelectItem value="2">2 autos</SelectItem>
-                  <SelectItem value="3">3+ autos</SelectItem>
                 </SelectContent>
               </Select>
             </div>
