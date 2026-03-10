@@ -31,8 +31,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [budget, setBudget] = useState("");
   const [constructionType, setConstructionType] = useState("");
   const [finishing, setFinishing] = useState("");
-  const [bedrooms, setBedrooms] = useState("");
-  const [bathrooms, setBathrooms] = useState("");
   const [kitchen, setKitchen] = useState("");
   const [garage, setGarage] = useState("");
   const [result, setResult] = useState<Result | null>(null);
@@ -155,37 +153,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                   <SelectItem value="basic">Básico</SelectItem>
                   <SelectItem value="standard">Estándar</SelectItem>
                   <SelectItem value="premium">Premium</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs">Dormitorios</Label>
-              <Select value={bedrooms} onValueChange={setBedrooms}>
-                <SelectTrigger className="mt-1 h-9 text-sm">
-                  <SelectValue placeholder="Seleccionar" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3</SelectItem>
-                  <SelectItem value="4">4+</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label className="text-xs">Baños</Label>
-              <Select value={bathrooms} onValueChange={setBathrooms}>
-                <SelectTrigger className="mt-1 h-9 text-sm">
-                  <SelectValue placeholder="Seleccionar" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3</SelectItem>
-                  <SelectItem value="4">4+</SelectItem>
                 </SelectContent>
               </Select>
             </div>
