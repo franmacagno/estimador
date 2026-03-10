@@ -12,7 +12,7 @@ import {
 import { Clock, Loader2, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbwMxEByxNJ5NyQ_AjxqBmFu28ZceVcJGshqxXNmvu1luFqwOzngDNuoDMaz04tFPP4kjg/exec";
+  "https://script.google.com/macros/s/AKfycbzzmrDSB698IcTlnOIGZC9QmBMrP7mwFRMWgkgk1kKUMSLQb8o5OUjUaXzNEldrOOerHg/exec";
 
 interface ApiResult {
   costo_total: number;
