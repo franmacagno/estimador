@@ -145,18 +145,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label className="text-xs">Tipo de construcción</Label>
-              <Select value={constructionType} onValueChange={setConstructionType}>
-                <SelectTrigger className="mt-1 h-9 text-sm">
-                  <SelectValue placeholder="Seleccionar" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="traditional">Tradicional</SelectItem>
-                  <SelectItem value="steel">Steel Frame</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
               <Label className="text-xs">Nivel de terminación</Label>
               <Select value={finishing} onValueChange={setFinishing}>
                 <SelectTrigger className="mt-1 h-9 text-sm">
