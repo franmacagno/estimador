@@ -91,17 +91,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
             </Select>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label htmlFor="location" className="text-xs">Ubicación</Label>
-              <Input
-                id="location"
-                placeholder="Ej: Buenos Aires"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="mt-1 h-9 text-sm"
-              />
-            </div>
+          <div className="grid grid-cols-1 gap-3">
             {modoCalculo === "presupuesto" ? (
               <div>
                 <Label htmlFor="budget" className="text-xs">Presupuesto ($)</Label>
