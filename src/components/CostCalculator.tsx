@@ -38,7 +38,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
   const getPrice = () => {
     let price = 750;
-    if (constructionType === "steel") price = 700;
     if (finishing === "premium") price *= 1.2;
     if (finishing === "basic") price *= 0.9;
     return price;
