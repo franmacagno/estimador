@@ -2,17 +2,11 @@ import { useState, RefObject } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Clock, Loader2, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbzzmrDSB698IcTlnOIGZC9QmBMrP7mwFRMWgkgk1kKUMSLQb8o5OUjUaXzNEldrOOerHg/exec";
+  "https://script.google.com/macros/s/AKfycbyH7TZ4KG9SNHfuFEFXhsQKcMunRoERdtmK-19OysFWVjrUlvYANXo_VgrUfmwLEtGHYQ/exec";
 
 interface ApiResult {
   costo_total: number;
@@ -34,7 +28,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [sqm, setSqm] = useState("");
   const [budget, setBudget] = useState("");
   const [finishing, setFinishing] = useState("");
-  
+
   const [personas, setPersonas] = useState("");
   const [garage, setGarage] = useState("");
 
@@ -49,8 +43,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
       modo_calculo: modoCalculo,
       personas: parseInt(personas) || 1,
       cochera: parseInt(garage) || 0,
-      paquete_terminacion:
-        finishing === "basic" ? "basico" : finishing === "premium" ? "premium" : "estandar",
+      paquete_terminacion: finishing === "basic" ? "basico" : finishing === "premium" ? "premium" : "estandar",
     };
 
     if (modoCalculo === "m2") {
@@ -90,9 +83,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
     <div>
       {/* Form */}
       <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
-        <h2 className="text-xl font-bold text-card-foreground mb-5 text-center font-heading">
-          Configurá tu casa
-        </h2>
+        <h2 className="text-xl font-bold text-card-foreground mb-5 text-center font-heading">Configurá tu casa</h2>
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -110,7 +101,9 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
             </div>
             {modoCalculo === "presupuesto" ? (
               <div>
-                <Label htmlFor="budget" className="text-xs">Presupuesto ($)</Label>
+                <Label htmlFor="budget" className="text-xs">
+                  Presupuesto ($)
+                </Label>
                 <Input
                   id="budget"
                   type="number"
@@ -122,7 +115,9 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
               </div>
             ) : (
               <div>
-                <Label htmlFor="sqm" className="text-xs">Metros cuadrados</Label>
+                <Label htmlFor="sqm" className="text-xs">
+                  Metros cuadrados
+                </Label>
                 <Input
                   id="sqm"
                   type="number"
@@ -183,11 +178,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
             </div>
           </div>
 
-          <Button
-            className="w-full py-5 text-sm mt-1"
-            onClick={handleCalculate}
-            disabled={loading}
-          >
+          <Button className="w-full py-5 text-sm mt-1" onClick={handleCalculate} disabled={loading}>
             {loading ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -241,9 +232,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
               <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                <p className="text-sm text-accent-foreground leading-relaxed">
-                  {result.resumen_proyecto}
-                </p>
+                <p className="text-sm text-accent-foreground leading-relaxed">{result.resumen_proyecto}</p>
               </div>
             </div>
           ) : (
@@ -259,7 +248,8 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                   <p>Con tu presupuesto actual podés construir aproximadamente {result.m2_posibles} m².</p>
                   <p>{result.resumen_proyecto}</p>
                   <p className="font-semibold">
-                    Te faltan aproximadamente {formatUSD(result.presupuesto_faltante)} para alcanzar el proyecto recomendado.
+                    Te faltan aproximadamente {formatUSD(result.presupuesto_faltante)} para alcanzar el proyecto
+                    recomendado.
                   </p>
                 </div>
               </div>
