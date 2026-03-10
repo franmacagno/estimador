@@ -31,8 +31,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [budget, setBudget] = useState("");
   const [constructionType, setConstructionType] = useState("");
   const [finishing, setFinishing] = useState("");
-  const [bedrooms, setBedrooms] = useState("");
-  const [bathrooms, setBathrooms] = useState("");
   const [kitchen, setKitchen] = useState("");
   const [garage, setGarage] = useState("");
   const [result, setResult] = useState<Result | null>(null);
