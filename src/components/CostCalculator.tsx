@@ -9,14 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Download, Users, Clock } from "lucide-react";
+import { Clock, Loader2, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 
-interface Result {
-  sqm: number;
-  pricePerSqm: number;
-  total: number;
-  months: number;
-  mode: "m2" | "presupuesto";
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbwMxEByxNJ5NyQ_AjxqBmFu28ZceVcJGshqxXNmvu1luFqwOzngDNuoDMaz04tFPP4kjg/exec";
+
+interface ApiResult {
+  costo_total: number;
+  m2_posibles: number;
+  tiempo_obra: number;
+  estado_proyecto: "VIABLE" | "NO_VIABLE";
+  resumen_proyecto: string;
+  faltante_m2: number;
+  presupuesto_faltante: number;
 }
 
 interface Props {
@@ -26,52 +31,64 @@ interface Props {
 
 const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [modoCalculo, setModoCalculo] = useState("");
-  
   const [sqm, setSqm] = useState("");
   const [budget, setBudget] = useState("");
-  
   const [finishing, setFinishing] = useState("");
   const [kitchen, setKitchen] = useState("");
   const [personas, setPersonas] = useState("");
   const [garage, setGarage] = useState("");
-  const [result, setResult] = useState<Result | null>(null);
 
-  const getPrice = () => {
-    let price = 750;
-    if (finishing === "premium") price *= 1.2;
-    if (finishing === "basic") price *= 0.9;
-    return price;
-  };
+  const [result, setResult] = useState<ApiResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const getMonths = (area: number) => {
-    let months = Math.ceil(area / 15);
-    if (finishing === "premium") months = Math.ceil(months * 1.2);
-    return Math.max(4, months);
-  };
+  const handleCalculate = async () => {
+    if (!modoCalculo) return;
 
-  const handleCalculate = () => {
-    const price = getPrice();
+    const body: Record<string, string | number> = {
+      modo_calculo: modoCalculo,
+      personas: parseInt(personas) || 1,
+      cochera: parseInt(garage) || 0,
+      paquete_terminacion:
+        finishing === "basic" ? "basico" : finishing === "premium" ? "premium" : "estandar",
+    };
 
     if (modoCalculo === "m2") {
       const area = parseFloat(sqm);
       if (!area || area <= 0) return;
-      setResult({ sqm: area, pricePerSqm: Math.round(price), total: Math.round(area * price), months: getMonths(area), mode: "m2" });
-    } else if (modoCalculo === "presupuesto") {
+      body.m2 = area;
+    } else {
       const totalBudget = parseFloat(budget);
       if (!totalBudget || totalBudget <= 0) return;
-      const area = Math.floor(totalBudget / price);
-      setResult({ sqm: area, pricePerSqm: Math.round(price), total: Math.round(totalBudget), months: getMonths(area), mode: "presupuesto" });
-    } else {
-      return;
+      body.presupuesto = totalBudget;
     }
-    onResult?.();
+
+    setLoading(true);
+    setError(false);
+    setResult(null);
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error("API error");
+      const data: ApiResult = await res.json();
+      setResult(data);
+      onResult?.();
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const formatCurrency = (n: number) =>
-    "$" + n.toLocaleString("es-AR");
+  const formatUSD = (n: number) => "USD " + n.toLocaleString("es-AR");
 
   return (
     <div>
+      {/* Form */}
       <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
         <h2 className="text-xl font-bold text-card-foreground mb-5 text-center font-heading">
           Configurá tu casa
@@ -178,57 +195,88 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
             </div>
           </div>
 
-          <Button className="w-full py-5 text-sm mt-1" onClick={handleCalculate}>
-            Ver proyecto estimado
+          <Button
+            className="w-full py-5 text-sm mt-1"
+            onClick={handleCalculate}
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Calculando proyecto...
+              </span>
+            ) : (
+              "Ver proyecto estimado"
+            )}
           </Button>
         </div>
       </div>
 
+      {/* Error */}
+      {error && (
+        <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-5 mt-5 text-center">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <AlertTriangle className="h-5 w-5 text-destructive" />
+            <p className="text-sm font-semibold text-destructive">
+              No pudimos calcular el proyecto. Intentá nuevamente.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Result */}
       {result && (
-        <div ref={resultRef} className="bg-card rounded-2xl border border-border p-6 shadow-sm mt-5 text-center">
-          <h3 className="text-lg font-bold text-card-foreground mb-5 font-heading">
-            {result.mode === "presupuesto" ? "Metros cuadrados posibles" : "Costo estimado de construcción"}
+        <div ref={resultRef} className="bg-card rounded-2xl border border-border p-6 shadow-sm mt-5">
+          <h3 className="text-lg font-bold text-card-foreground mb-5 text-center font-heading">
+            Proyecto estimado para tu casa
           </h3>
 
-          <div className="grid grid-cols-2 gap-3 mb-3">
-            <div className="bg-muted rounded-xl p-4">
-              <p className="text-xs text-muted-foreground mb-1">
-                {result.mode === "presupuesto" ? "m² posibles" : "Tamaño"}
-              </p>
-              <p className="text-lg font-bold text-foreground">{result.sqm} m²</p>
-            </div>
-            <div className="bg-muted rounded-xl p-4">
-              <p className="text-xs text-muted-foreground mb-1">Precio por m²</p>
-              <p className="text-lg font-bold text-foreground">{formatCurrency(result.pricePerSqm)}</p>
-            </div>
-          </div>
+          {result.estado_proyecto === "VIABLE" ? (
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-muted rounded-xl p-4 text-center">
+                  <p className="text-xs text-muted-foreground mb-1">Costo estimado</p>
+                  <p className="text-lg font-bold text-foreground">{formatUSD(result.costo_total)}</p>
+                </div>
+                <div className="bg-muted rounded-xl p-4 text-center">
+                  <p className="text-xs text-muted-foreground mb-1">Superficie estimada</p>
+                  <p className="text-lg font-bold text-foreground">{result.m2_posibles} m²</p>
+                </div>
+                <div className="bg-muted rounded-xl p-4 text-center">
+                  <p className="text-xs text-muted-foreground mb-1">Tiempo estimado</p>
+                  <div className="flex items-center justify-center gap-1.5">
+                    <Clock className="h-4 w-4 text-foreground" />
+                    <p className="text-lg font-bold text-foreground">{result.tiempo_obra} meses</p>
+                  </div>
+                </div>
+              </div>
 
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            <div className="bg-accent rounded-xl p-4">
-              <p className="text-xs text-muted-foreground mb-1">
-                {result.mode === "presupuesto" ? "Presupuesto" : "Costo total"}
-              </p>
-              <p className="text-lg font-bold text-accent-foreground">{formatCurrency(result.total)}</p>
-            </div>
-            <div className="bg-accent rounded-xl p-4">
-              <p className="text-xs text-muted-foreground mb-1">Tiempo estimado</p>
-              <div className="flex items-center justify-center gap-1.5">
-                <Clock className="h-4 w-4 text-accent-foreground" />
-                <p className="text-lg font-bold text-accent-foreground">{result.months} meses</p>
+              <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                <p className="text-sm text-accent-foreground leading-relaxed">
+                  {result.resumen_proyecto}
+                </p>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="bg-muted rounded-xl p-4 text-center">
+                <p className="text-xs text-muted-foreground mb-1">Superficie posible</p>
+                <p className="text-lg font-bold text-foreground">{result.m2_posibles} m²</p>
+              </div>
 
-          <div className="flex gap-3">
-            <Button variant="outline" className="flex-1 gap-2 text-sm">
-              <Users className="h-4 w-4" />
-              Comparar arquitectos
-            </Button>
-            <Button variant="outline" className="flex-1 gap-2 text-sm">
-              <Download className="h-4 w-4" />
-              Descargar estimación
-            </Button>
-          </div>
+              <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
+                <XCircle className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
+                <div className="text-sm text-accent-foreground leading-relaxed space-y-2">
+                  <p>Con tu presupuesto actual podés construir aproximadamente {result.m2_posibles} m².</p>
+                  <p>{result.resumen_proyecto}</p>
+                  <p className="font-semibold">
+                    Te faltan aproximadamente {formatUSD(result.presupuesto_faltante)} para alcanzar el proyecto recomendado.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
