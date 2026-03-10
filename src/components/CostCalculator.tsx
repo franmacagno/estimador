@@ -78,20 +78,19 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
         </h2>
 
         <div className="space-y-4">
-          <div>
-            <Label className="text-xs">Modo de cálculo</Label>
-            <Select value={modoCalculo} onValueChange={setModoCalculo}>
-              <SelectTrigger className="mt-1 h-9 text-sm">
-                <SelectValue placeholder="Seleccionar" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="m2">Por metros cuadrados</SelectItem>
-                <SelectItem value="presupuesto">Por presupuesto</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs">Modo de cálculo</Label>
+              <Select value={modoCalculo} onValueChange={setModoCalculo}>
+                <SelectTrigger className="mt-1 h-9 text-sm">
+                  <SelectValue placeholder="Seleccionar" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="m2">Por metros cuadrados</SelectItem>
+                  <SelectItem value="presupuesto">Por presupuesto</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             {modoCalculo === "presupuesto" ? (
               <div>
                 <Label htmlFor="budget" className="text-xs">Presupuesto ($)</Label>
@@ -136,9 +135,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
             <div>
               <Label className="text-xs">Nivel de terminación</Label>
               <Select value={finishing} onValueChange={setFinishing}>
