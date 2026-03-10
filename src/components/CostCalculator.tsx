@@ -133,6 +133,20 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
+              <Label htmlFor="personas" className="text-xs">Personas</Label>
+              <Input
+                id="personas"
+                type="number"
+                placeholder="Ej: 4"
+                value={personas}
+                onChange={(e) => setPersonas(e.target.value)}
+                className="mt-1 h-9 text-sm"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
               <Label className="text-xs">Tipo de construcción</Label>
               <Select value={constructionType} onValueChange={setConstructionType}>
                 <SelectTrigger className="mt-1 h-9 text-sm">
