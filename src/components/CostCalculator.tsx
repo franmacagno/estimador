@@ -29,7 +29,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [location, setLocation] = useState("");
   const [sqm, setSqm] = useState("");
   const [budget, setBudget] = useState("");
-  const [constructionType, setConstructionType] = useState("");
+  
   const [finishing, setFinishing] = useState("");
   const [kitchen, setKitchen] = useState("");
   const [personas, setPersonas] = useState("");
@@ -38,7 +38,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
   const getPrice = () => {
     let price = 750;
-    if (constructionType === "steel") price = 700;
     if (finishing === "premium") price *= 1.2;
     if (finishing === "basic") price *= 0.9;
     return price;
@@ -46,7 +45,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
   const getMonths = (area: number) => {
     let months = Math.ceil(area / 15);
-    if (constructionType === "steel") months = Math.ceil(months * 0.7);
     if (finishing === "premium") months = Math.ceil(months * 1.2);
     return Math.max(4, months);
   };
@@ -146,18 +144,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs">Tipo de construcción</Label>
-              <Select value={constructionType} onValueChange={setConstructionType}>
-                <SelectTrigger className="mt-1 h-9 text-sm">
-                  <SelectValue placeholder="Seleccionar" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="traditional">Tradicional</SelectItem>
-                  <SelectItem value="steel">Steel Frame</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
             <div>
               <Label className="text-xs">Nivel de terminación</Label>
               <Select value={finishing} onValueChange={setFinishing}>
