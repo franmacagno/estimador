@@ -45,7 +45,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
   const getMonths = (area: number) => {
     let months = Math.ceil(area / 15);
-    if (constructionType === "steel") months = Math.ceil(months * 0.7);
     if (finishing === "premium") months = Math.ceil(months * 1.2);
     return Math.max(4, months);
   };
