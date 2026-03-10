@@ -19,7 +19,8 @@ const Index = () => {
       <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-2">
           <Home className="h-5 w-5 text-primary" />
-          <span className="font-heading text-lg font-bold text-foreground">BuildCost</span>
+          <span className="font-heading text-lg font-bold text-foreground">costodecasa.com
+</span>
         </div>
         <div className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1">
           <Calculator className="h-3.5 w-3.5 text-accent-foreground" />
@@ -32,11 +33,13 @@ const Index = () => {
         <div className="flex flex-col lg:flex-row gap-10 items-start">
           {/* Left: Hero text */}
           <div className="flex-1 pt-4 lg:pt-12">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.1] mb-5 font-heading">
-              Calculá el costo de construir tu casa
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.1] mb-5 font-heading">¿Cuánto cuesta construir tu casa?
+
             </h1>
-            <p className="text-base text-muted-foreground max-w-md mb-8">
-              Configurá tu casa en 2 minutos y obtené un costo estimado de construcción.
+            <p className="text-base text-muted-foreground max-w-md mb-8">Calculalo en 30 segundos.
+Configurá tu casa y obtené un costo estimado de construcción.
+
+
             </p>
 
             {/* Mini feature list */}
@@ -77,11 +80,11 @@ const Index = () => {
                 <div className="absolute inset-2 bg-primary/15 rounded-2xl -rotate-3" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <svg width="80" height="80" viewBox="0 0 100 100" fill="none" className="drop-shadow-sm">
-                    <rect x="20" y="45" width="60" height="40" rx="4" className="fill-primary/20 stroke-primary" strokeWidth="2"/>
-                    <polygon points="50,15 85,45 15,45" className="fill-primary/15 stroke-primary" strokeWidth="2" strokeLinejoin="round"/>
-                    <rect x="40" y="60" width="16" height="25" rx="2" className="fill-primary/30 stroke-primary" strokeWidth="1.5"/>
-                    <rect x="25" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5"/>
-                    <rect x="62" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5"/>
+                    <rect x="20" y="45" width="60" height="40" rx="4" className="fill-primary/20 stroke-primary" strokeWidth="2" />
+                    <polygon points="50,15 85,45 15,45" className="fill-primary/15 stroke-primary" strokeWidth="2" strokeLinejoin="round" />
+                    <rect x="40" y="60" width="16" height="25" rx="2" className="fill-primary/30 stroke-primary" strokeWidth="1.5" />
+                    <rect x="25" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5" />
+                    <rect x="62" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5" />
                   </svg>
                 </div>
               </div>
@@ -90,7 +93,7 @@ const Index = () => {
 
           {/* Right: Calculator form */}
           <div className="w-full lg:w-[460px] flex-shrink-0">
-            <CostCalculator onResult={() => { setShowResult(true); scrollToResult(); }} resultRef={resultRef} />
+            <CostCalculator onResult={() => {setShowResult(true);scrollToResult();}} resultRef={resultRef} />
           </div>
         </div>
       </section>
@@ -114,11 +117,11 @@ const Index = () => {
             <div className="absolute inset-2 bg-primary/15 rounded-2xl -rotate-3" />
             <div className="absolute inset-0 flex items-center justify-center">
               <svg width="100" height="100" viewBox="0 0 100 100" fill="none" className="drop-shadow-sm">
-                <rect x="20" y="45" width="60" height="40" rx="4" className="fill-primary/20 stroke-primary" strokeWidth="2"/>
-                <polygon points="50,15 85,45 15,45" className="fill-primary/15 stroke-primary" strokeWidth="2" strokeLinejoin="round"/>
-                <rect x="40" y="60" width="16" height="25" rx="2" className="fill-primary/30 stroke-primary" strokeWidth="1.5"/>
-                <rect x="25" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5"/>
-                <rect x="62" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5"/>
+                <rect x="20" y="45" width="60" height="40" rx="4" className="fill-primary/20 stroke-primary" strokeWidth="2" />
+                <polygon points="50,15 85,45 15,45" className="fill-primary/15 stroke-primary" strokeWidth="2" strokeLinejoin="round" />
+                <rect x="40" y="60" width="16" height="25" rx="2" className="fill-primary/30 stroke-primary" strokeWidth="1.5" />
+                <rect x="25" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5" />
+                <rect x="62" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5" />
               </svg>
             </div>
           </div>
@@ -129,8 +132,5 @@ const Index = () => {
       <footer className="text-center py-12 text-sm text-muted-foreground">
         © 2026 BuildCost. Esta es una herramienta de estimación con fines de referencia.
       </footer>
-    </div>
-  );
-};
-
+    </div>);};
 export default Index;
