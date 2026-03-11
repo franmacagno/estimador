@@ -151,11 +151,12 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
     if (!modoCalculo || !tipoConstructivo) return;
 
     // --- Payload base ---
-    const baseBody: Record<string, string | number> = {
+    const baseBody = {
       modo_calculo: modoCalculo,
-      personas: parseInt(personas) || 1,
-      cochera: parseInt(garage) || 0,
-      paquete_terminacion: finishing === "basic" ? "basico" : finishing === "premium" ? "premium" : "estandar",
+      personas: Number(personas),
+      cochera: Number(cochera),
+      paquete_terminacion: paqueteTerminacion,
+      ...(modoCalculo === "m2" ? { m2: Number(inputM2) } : { presupuesto: Number(inputPresupuesto) }),
     };
 
     if (modoCalculo === "m2") {
@@ -293,8 +294,11 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
             </div>
             <div>
               <Label className="text-xs">Tipo de construcción</Label>
-              <Select value={tipoConstructivo} onValueChange={(v) => setTipoConstructivo(v as "steel_frame" | "tradicional" | "comparar")}>
-                <SelectTrigger className="mt-1 h-9 text-sm">
+              <Select
+                value={tipoConstructivo}
+                onValueChange={(value) => setTipoConstructivo(value as "steel_frame" | "tradicional" | "comparar")}
+              >
+                <SelectTrigger>
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
                 <SelectContent>
