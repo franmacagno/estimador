@@ -184,6 +184,10 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   };
 
   const handleCalculate = async () => {
+    console.log("modoCalculo", modoCalculo);
+    console.log("tipoConstructivo", tipoConstructivo);
+    console.log("sqm", sqm);
+    console.log("budget", budget);
     const personasNumber = Number(personas || 1);
     const garageNumber = Number(garage || 0);
     const finishingApi = mapFinishingToApi(finishing);
