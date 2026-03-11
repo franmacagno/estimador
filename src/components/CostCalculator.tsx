@@ -19,6 +19,12 @@ interface ApiResult {
   presupuesto_faltante?: number;
 }
 
+interface CompareApiResult {
+  tipo_resultado: "comparacion";
+  steel_frame: ApiResult;
+  tradicional: ApiResult;
+}
+
 interface Props {
   onResult?: () => void;
   resultRef?: RefObject<HTMLDivElement>;
@@ -26,16 +32,22 @@ interface Props {
 
 const formatUSD = (n: number) => "USD " + n.toLocaleString("es-AR");
 
-const fetchApi = async (body: Record<string, string | number>): Promise<ApiResult> => {
+const fetchApi = async (body: Record<string, string | number>): Promise<ApiResult | CompareApiResult> => {
+  console.log("API payload", body);
+
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "text/plain" },
     body: JSON.stringify(body),
   });
 
-  if (!res.ok) throw new Error("API error");
+  if (!res.ok) {
+    throw new Error("API error");
+  }
 
-  return res.json();
+  const json = await res.json();
+  console.log("API response", json);
+  return json;
 };
 
 interface ResultBlockProps {
@@ -172,10 +184,8 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   };
 
   const handleCalculate = async () => {
-    if (!modoCalculo || !tipoConstructivo) return;
-
-    const personasNumber = Number(personas);
-    const garageNumber = Number(garage);
+    const personasNumber = Number(personas || 1);
+    const garageNumber = Number(garage || 0);
     const finishingApi = mapFinishingToApi(finishing);
 
     const baseBody: Record<string, string | number> = {
@@ -183,6 +193,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
       personas: personasNumber,
       cochera: garageNumber,
       paquete_terminacion: finishingApi,
+      tipo_constructivo: tipoConstructivo,
     };
 
     if (modoCalculo === "m2") {
@@ -201,33 +212,19 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
     setCompareResults(null);
 
     try {
-      if (tipoConstructivo === "comparar") {
-        const sfPayload = {
-          ...baseBody,
-          tipo_constructivo: "steel_frame",
-        };
+      const response = await fetchApi(baseBody);
 
-        const sfResult = await fetchApi(sfPayload);
-
-        const tradPayload = {
-          ...baseBody,
-          tipo_constructivo: "tradicional",
-        };
-
-        const tradResult = await fetchApi(tradPayload);
-
+      if (
+        tipoConstructivo === "comparar" &&
+        "tipo_resultado" in response &&
+        response.tipo_resultado === "comparacion"
+      ) {
         setCompareResults({
-          steel_frame: sfResult,
-          tradicional: tradResult,
+          steel_frame: response.steel_frame,
+          tradicional: response.tradicional,
         });
       } else {
-        const payload = {
-          ...baseBody,
-          tipo_constructivo: tipoConstructivo,
-        };
-
-        const data = await fetchApi(payload);
-        setResult(data);
+        setResult(response as ApiResult);
       }
 
       onResult?.();
