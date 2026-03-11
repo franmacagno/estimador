@@ -187,7 +187,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
     console.log("tipoConstructivo", tipoConstructivo);
     console.log("sqm", sqm);
     console.log("budget", budget);
-    const personasNumber = Number(personas || 1);
+    const personasNumber = personas === "default" ? 2 : Number(personas || 2);
     const garageNumber = Number(garage || 0);
     const finishingApi = mapFinishingToApi(finishing);
 
