@@ -65,8 +65,8 @@ const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBloc
             <p className="text-lg font-bold text-foreground">{formatUSD(result.costo_total)}</p>
           </div>
           <div className="bg-muted rounded-xl p-4 text-center">
-            <p className="text-xs text-muted-foreground mb-1">{result.m2_totales != null && result.m2_totales > 0 ? "Superficie total" : "Superficie posible"}</p>
-            <p className="text-lg font-bold text-foreground">{(result.m2_totales != null && result.m2_totales > 0) ? result.m2_totales : result.m2_posibles} m²</p>
+            <p className="text-xs text-muted-foreground mb-1">{surfaceLabel}</p>
+            <p className="text-lg font-bold text-foreground">{surfaceValue} m²</p>
           </div>
           <div className="bg-muted rounded-xl p-4 text-center">
             <p className="text-xs text-muted-foreground mb-1">Tiempo estimado</p>
