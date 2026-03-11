@@ -154,6 +154,8 @@ const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBloc
       )}
     </div>
   </div>
+)}
+    </div>
   );
 };
 
