@@ -175,11 +175,9 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
     try {
       if (tipoConstructivo === "comparar") {
-        // --- Dos llamadas en paralelo ---
-        const [sfResult, tradResult] = await Promise.all([
-          fetchApi({ ...baseBody, tipo_constructivo: "steel_frame" }),
-          fetchApi({ ...baseBody, tipo_constructivo: "tradicional" }),
-        ]);
+        // --- Dos llamadas SECUENCIALES (Google Sheet mutable) ---
+        const sfResult = await fetchApi({ ...baseBody, tipo_constructivo: "steel_frame" });
+        const tradResult = await fetchApi({ ...baseBody, tipo_constructivo: "tradicional" });
         setCompareResults({ steel_frame: sfResult, tradicional: tradResult });
       } else {
         // --- Una sola llamada ---
