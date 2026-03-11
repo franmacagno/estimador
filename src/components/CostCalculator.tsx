@@ -358,6 +358,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
               result={compareResults.tradicional}
               modoCalculo={modoCalculo}
               budget={budget}
+              inputM2={sqm}
               label="Tradicional"
             />
           </div>
