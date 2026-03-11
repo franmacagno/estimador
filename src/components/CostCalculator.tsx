@@ -350,6 +350,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
               result={compareResults.steel_frame}
               modoCalculo={modoCalculo}
               budget={budget}
+              inputM2={sqm}
               label="Steel Frame"
             />
             <div className="border-t border-border" />
