@@ -164,7 +164,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [sqm, setSqm] = useState("");
   const [budget, setBudget] = useState("");
   const [finishing, setFinishing] = useState<"basic" | "standard" | "premium">("standard");
-  const [personas, setPersonas] = useState("3");
+  const [personas, setPersonas] = useState("default");
   const [garage, setGarage] = useState("1");
   const [tipoConstructivo, setTipoConstructivo] = useState<"steel_frame" | "tradicional" | "comparar">("steel_frame");
 
