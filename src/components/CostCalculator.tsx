@@ -46,19 +46,20 @@ interface ResultBlockProps {
 
 const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBlockProps) => {
   // Determine surface value: prefer m2_totales from API, then m2_posibles, then user input
-  const surfaceValue = (result.m2_totales != null && result.m2_totales > 0)
-    ? result.m2_totales
-    : (result.m2_posibles != null && result.m2_posibles > 0)
-      ? result.m2_posibles
-      : (inputM2 ? parseFloat(inputM2) : 0);
-  const surfaceLabel = (result.m2_totales != null && result.m2_totales > 0) ? "Superficie total" : "Superficie posible";
+  const surfaceValue =
+    result.m2_totales != null && result.m2_totales > 0
+      ? result.m2_totales
+      : result.m2_posibles != null && result.m2_posibles > 0
+        ? result.m2_posibles
+        : inputM2
+          ? parseFloat(inputM2)
+          : 0;
+  const surfaceLabel = result.m2_totales != null && result.m2_totales > 0 ? "Superficie total" : "Superficie posible";
 
   if (modoCalculo === "m2") {
     return (
       <div className="space-y-4">
-        {label && (
-          <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">{label}</h4>
-        )}
+        {label && <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">{label}</h4>}
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-muted rounded-xl p-4 text-center">
             <p className="text-xs text-muted-foreground mb-1">Costo estimado</p>
@@ -89,9 +90,7 @@ const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBloc
 
   return (
     <div className="space-y-4">
-      {label && (
-        <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">{label}</h4>
-      )}
+      {label && <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">{label}</h4>}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-muted rounded-xl p-4 text-center">
           <p className="text-xs text-muted-foreground mb-1">{surfaceLabel}</p>
@@ -123,7 +122,8 @@ const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBloc
             <p>{result.resumen_proyecto}</p>
             {result.presupuesto_faltante > 0 && (
               <p className="font-semibold">
-                Te faltan aproximadamente {formatUSD(result.presupuesto_faltante)} para alcanzar el proyecto recomendado.
+                Te faltan aproximadamente {formatUSD(result.presupuesto_faltante)} para alcanzar el proyecto
+                recomendado.
               </p>
             )}
           </div>
@@ -140,7 +140,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [finishing, setFinishing] = useState("");
   const [personas, setPersonas] = useState("");
   const [garage, setGarage] = useState("");
-  const [tipoConstructivo, setTipoConstructivo] = useState("");
+  const [tipoConstructivo, setTipoConstructivo] = useState<"steel_frame" | "tradicional" | "comparar">("steel_frame");
 
   const [result, setResult] = useState<ApiResult | null>(null);
   const [compareResults, setCompareResults] = useState<{ steel_frame: ApiResult; tradicional: ApiResult } | null>(null);
@@ -216,7 +216,9 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
             </div>
             {modoCalculo === "presupuesto" ? (
               <div>
-                <Label htmlFor="budget" className="text-xs">Presupuesto ($)</Label>
+                <Label htmlFor="budget" className="text-xs">
+                  Presupuesto ($)
+                </Label>
                 <Input
                   id="budget"
                   type="number"
@@ -228,7 +230,9 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
               </div>
             ) : (
               <div>
-                <Label htmlFor="sqm" className="text-xs">Metros cuadrados</Label>
+                <Label htmlFor="sqm" className="text-xs">
+                  Metros cuadrados
+                </Label>
                 <Input
                   id="sqm"
                   type="number"
