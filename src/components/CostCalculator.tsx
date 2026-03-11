@@ -9,14 +9,14 @@ const API_URL =
   "https://script.google.com/macros/s/AKfycbzzmrDSB698IcTlnOIGZC9QmBMrP7mwFRMWgkgk1kKUMSLQb8o5OUjUaXzNEldrOOerHg/exec";
 
 interface ApiResult {
-  costo_total: number;
-  m2_posibles: number;
-  m2_totales: number;
-  tiempo_obra: number;
-  estado_proyecto: "VIABLE" | "NO_VIABLE";
-  resumen_proyecto: string;
-  faltante_m2: number;
-  presupuesto_faltante: number;
+  costo_total?: number;
+  m2_posibles?: number;
+  m2_totales?: number;
+  tiempo_obra?: number;
+  estado_proyecto?: "VIABLE" | "NO_VIABLE";
+  resumen_proyecto?: string;
+  faltante_m2?: number;
+  presupuesto_faltante?: number;
 }
 
 interface Props {
@@ -32,79 +32,95 @@ const fetchApi = async (body: Record<string, string | number>): Promise<ApiResul
     headers: { "Content-Type": "text/plain" },
     body: JSON.stringify(body),
   });
+
   if (!res.ok) throw new Error("API error");
+
   return res.json();
 };
 
 interface ResultBlockProps {
   result: ApiResult;
-  modoCalculo: string;
+  modoCalculo: "m2" | "presupuesto";
   budget: string;
   inputM2?: string;
   label?: string;
 }
 
 const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBlockProps) => {
-  // Determine surface value: prefer m2_totales from API, then m2_posibles, then user input
+  const inputM2Number = inputM2 ? Number(inputM2) : 0;
+
   const surfaceValue =
-    result.m2_totales != null && result.m2_totales > 0
-      ? result.m2_totales
-      : result.m2_posibles != null && result.m2_posibles > 0
+    modoCalculo === "m2"
+      ? result.m2_totales && result.m2_totales > 0
+        ? result.m2_totales
+        : inputM2Number
+      : result.m2_posibles && result.m2_posibles > 0
         ? result.m2_posibles
-        : inputM2
-          ? parseFloat(inputM2)
-          : 0;
-  const surfaceLabel = result.m2_totales != null && result.m2_totales > 0 ? "Superficie total" : "Superficie posible";
+        : 0;
+
+  const surfaceLabel = modoCalculo === "m2" ? "Superficie total" : "Superficie posible";
+  const tiempoObra = result.tiempo_obra ?? 0;
+  const costoTotal = result.costo_total ?? 0;
+  const resumenProyecto = result.resumen_proyecto ?? "";
+  const estadoProyecto = result.estado_proyecto ?? "VIABLE";
+  const presupuestoFaltante = result.presupuesto_faltante ?? 0;
+  const m2Posibles = result.m2_posibles ?? 0;
 
   if (modoCalculo === "m2") {
     return (
       <div className="space-y-4">
         {label && <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">{label}</h4>}
+
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-muted rounded-xl p-4 text-center">
             <p className="text-xs text-muted-foreground mb-1">Costo estimado</p>
-            <p className="text-lg font-bold text-foreground">{formatUSD(result.costo_total)}</p>
+            <p className="text-lg font-bold text-foreground">{formatUSD(costoTotal)}</p>
           </div>
+
           <div className="bg-muted rounded-xl p-4 text-center">
             <p className="text-xs text-muted-foreground mb-1">{surfaceLabel}</p>
             <p className="text-lg font-bold text-foreground">{surfaceValue} m²</p>
           </div>
+
           <div className="bg-muted rounded-xl p-4 text-center">
             <p className="text-xs text-muted-foreground mb-1">Tiempo estimado</p>
             <div className="flex items-center justify-center gap-1.5">
               <Clock className="h-4 w-4 text-foreground" />
-              <p className="text-lg font-bold text-foreground">{result.tiempo_obra} meses</p>
+              <p className="text-lg font-bold text-foreground">{tiempoObra} meses</p>
             </div>
           </div>
         </div>
+
         <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
           <CheckCircle className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-          <p className="text-sm text-accent-foreground leading-relaxed">{result.resumen_proyecto}</p>
+          <p className="text-sm text-accent-foreground leading-relaxed">{resumenProyecto}</p>
         </div>
       </div>
     );
   }
 
-  // modo presupuesto
-  const isViable = result.estado_proyecto === "VIABLE";
+  const isViable = estadoProyecto === "VIABLE";
 
   return (
     <div className="space-y-4">
       {label && <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">{label}</h4>}
+
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-muted rounded-xl p-4 text-center">
           <p className="text-xs text-muted-foreground mb-1">{surfaceLabel}</p>
           <p className="text-lg font-bold text-foreground">{surfaceValue} m²</p>
         </div>
+
         <div className="bg-muted rounded-xl p-4 text-center">
           <p className="text-xs text-muted-foreground mb-1">Presupuesto ingresado</p>
-          <p className="text-lg font-bold text-foreground">{formatUSD(parseFloat(budget) || 0)}</p>
+          <p className="text-lg font-bold text-foreground">{formatUSD(Number(budget) || 0)}</p>
         </div>
+
         <div className="bg-muted rounded-xl p-4 text-center">
           <p className="text-xs text-muted-foreground mb-1">Tiempo estimado</p>
           <div className="flex items-center justify-center gap-1.5">
             <Clock className="h-4 w-4 text-foreground" />
-            <p className="text-lg font-bold text-foreground">{result.tiempo_obra} meses</p>
+            <p className="text-lg font-bold text-foreground">{tiempoObra} meses</p>
           </div>
         </div>
       </div>
@@ -112,18 +128,17 @@ const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBloc
       {isViable ? (
         <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
           <CheckCircle className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-          <p className="text-sm text-accent-foreground leading-relaxed">{result.resumen_proyecto}</p>
+          <p className="text-sm text-accent-foreground leading-relaxed">{resumenProyecto}</p>
         </div>
       ) : (
         <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
           <XCircle className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
           <div className="text-sm text-accent-foreground leading-relaxed space-y-2">
-            <p>Con tu presupuesto actual podés construir aproximadamente {result.m2_posibles} m².</p>
-            <p>{result.resumen_proyecto}</p>
-            {result.presupuesto_faltante > 0 && (
+            <p>Con tu presupuesto actual podés construir aproximadamente {m2Posibles} m².</p>
+            <p>{resumenProyecto}</p>
+            {presupuestoFaltante > 0 && (
               <p className="font-semibold">
-                Te faltan aproximadamente {formatUSD(result.presupuesto_faltante)} para alcanzar el proyecto
-                recomendado.
+                Te faltan aproximadamente {formatUSD(presupuestoFaltante)} para alcanzar el proyecto recomendado.
               </p>
             )}
           </div>
@@ -134,36 +149,48 @@ const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBloc
 };
 
 const CostCalculator = ({ onResult, resultRef }: Props) => {
-  const [modoCalculo, setModoCalculo] = useState("");
+  const [modoCalculo, setModoCalculo] = useState<"m2" | "presupuesto">("m2");
   const [sqm, setSqm] = useState("");
   const [budget, setBudget] = useState("");
-  const [finishing, setFinishing] = useState("");
-  const [personas, setPersonas] = useState("");
-  const [garage, setGarage] = useState("");
+  const [finishing, setFinishing] = useState<"basic" | "standard" | "premium">("standard");
+  const [personas, setPersonas] = useState("3");
+  const [garage, setGarage] = useState("1");
   const [tipoConstructivo, setTipoConstructivo] = useState<"steel_frame" | "tradicional" | "comparar">("steel_frame");
 
   const [result, setResult] = useState<ApiResult | null>(null);
-  const [compareResults, setCompareResults] = useState<{ steel_frame: ApiResult; tradicional: ApiResult } | null>(null);
+  const [compareResults, setCompareResults] = useState<{
+    steel_frame: ApiResult;
+    tradicional: ApiResult;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const mapFinishingToApi = (value: "basic" | "standard" | "premium") => {
+    if (value === "basic") return "basico";
+    if (value === "standard") return "estandar";
+    return "premium";
+  };
 
   const handleCalculate = async () => {
     if (!modoCalculo || !tipoConstructivo) return;
 
-    // --- Payload base ---
+    const personasNumber = Number(personas);
+    const garageNumber = Number(garage);
+    const finishingApi = mapFinishingToApi(finishing);
+
     const baseBody: Record<string, string | number> = {
       modo_calculo: modoCalculo,
-      personas: Number(personas),
-      cochera: Number(garage),
-      paquete_terminacion: finishing,
+      personas: personasNumber,
+      cochera: garageNumber,
+      paquete_terminacion: finishingApi,
     };
 
     if (modoCalculo === "m2") {
-      const area = parseFloat(sqm);
+      const area = Number(sqm);
       if (!area || area <= 0) return;
       baseBody.m2 = area;
     } else {
-      const totalBudget = parseFloat(budget);
+      const totalBudget = Number(budget);
       if (!totalBudget || totalBudget <= 0) return;
       baseBody.presupuesto = totalBudget;
     }
@@ -175,28 +202,45 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
 
     try {
       if (tipoConstructivo === "comparar") {
-        // --- Dos llamadas SECUENCIALES (Google Sheet mutable) ---
-        const sfResult = await fetchApi({ ...baseBody, tipo_constructivo: "steel_frame" });
-        const tradResult = await fetchApi({ ...baseBody, tipo_constructivo: "tradicional" });
-        setCompareResults({ steel_frame: sfResult, tradicional: tradResult });
+        const sfPayload = {
+          ...baseBody,
+          tipo_constructivo: "steel_frame",
+        };
+
+        const sfResult = await fetchApi(sfPayload);
+
+        const tradPayload = {
+          ...baseBody,
+          tipo_constructivo: "tradicional",
+        };
+
+        const tradResult = await fetchApi(tradPayload);
+
+        setCompareResults({
+          steel_frame: sfResult,
+          tradicional: tradResult,
+        });
       } else {
-        // --- Una sola llamada ---
-        const data = await fetchApi({ ...baseBody, tipo_constructivo: tipoConstructivo });
+        const payload = {
+          ...baseBody,
+          tipo_constructivo: tipoConstructivo,
+        };
+
+        const data = await fetchApi(payload);
         setResult(data);
       }
+
       onResult?.();
-    } catch {
+    } catch (err) {
+      console.error("Calculator error", err);
       setError(true);
     } finally {
       setLoading(false);
     }
   };
 
-  const hasResult = result || compareResults;
-
   return (
     <div>
-      {/* Form */}
       <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
         <h2 className="text-xl font-bold text-card-foreground mb-5 text-center font-heading">Configurá tu casa</h2>
 
@@ -204,7 +248,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <Label className="text-xs">Modo de cálculo</Label>
-              <Select value={modoCalculo} onValueChange={setModoCalculo}>
+              <Select value={modoCalculo} onValueChange={(value) => setModoCalculo(value as "m2" | "presupuesto")}>
                 <SelectTrigger className="mt-1 h-9 text-sm">
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
@@ -214,6 +258,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                 </SelectContent>
               </Select>
             </div>
+
             {modoCalculo === "presupuesto" ? (
               <div>
                 <Label htmlFor="budget" className="text-xs">
@@ -262,9 +307,13 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                 </SelectContent>
               </Select>
             </div>
+
             <div>
               <Label className="text-xs">Nivel de terminación</Label>
-              <Select value={finishing} onValueChange={setFinishing}>
+              <Select
+                value={finishing}
+                onValueChange={(value) => setFinishing(value as "basic" | "standard" | "premium")}
+              >
                 <SelectTrigger className="mt-1 h-9 text-sm">
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
@@ -291,13 +340,14 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                 </SelectContent>
               </Select>
             </div>
+
             <div>
               <Label className="text-xs">Tipo de construcción</Label>
               <Select
                 value={tipoConstructivo}
                 onValueChange={(value) => setTipoConstructivo(value as "steel_frame" | "tradicional" | "comparar")}
               >
-                <SelectTrigger>
+                <SelectTrigger className="mt-1 h-9 text-sm">
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
                 <SelectContent>
@@ -322,7 +372,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
         </div>
       </div>
 
-      {/* Error */}
       {error && (
         <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-5 mt-5 text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
@@ -334,7 +383,6 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
         </div>
       )}
 
-      {/* Single Result */}
       {result && (
         <div ref={resultRef} className="bg-card rounded-2xl border border-border p-6 shadow-sm mt-5">
           <h3 className="text-lg font-bold text-card-foreground mb-5 text-center font-heading">
@@ -344,12 +392,12 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
         </div>
       )}
 
-      {/* Compare Results */}
       {compareResults && (
         <div ref={resultRef} className="bg-card rounded-2xl border border-border p-6 shadow-sm mt-5">
           <h3 className="text-lg font-bold text-card-foreground mb-5 text-center font-heading">
             Comparación de proyectos
           </h3>
+
           <div className="space-y-6">
             <ResultBlock
               result={compareResults.steel_frame}
@@ -358,7 +406,9 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
               inputM2={sqm}
               label="Steel Frame"
             />
+
             <div className="border-t border-border" />
+
             <ResultBlock
               result={compareResults.tradicional}
               modoCalculo={modoCalculo}
