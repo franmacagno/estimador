@@ -44,7 +44,15 @@ interface ResultBlockProps {
   label?: string;
 }
 
-const ResultBlock = ({ result, modoCalculo, budget, label }: ResultBlockProps) => {
+const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBlockProps) => {
+  // Determine surface value: prefer m2_totales from API, then m2_posibles, then user input
+  const surfaceValue = (result.m2_totales != null && result.m2_totales > 0)
+    ? result.m2_totales
+    : (result.m2_posibles != null && result.m2_posibles > 0)
+      ? result.m2_posibles
+      : (inputM2 ? parseFloat(inputM2) : 0);
+  const surfaceLabel = (result.m2_totales != null && result.m2_totales > 0) ? "Superficie total" : "Superficie posible";
+
   if (modoCalculo === "m2") {
     return (
       <div className="space-y-4">
