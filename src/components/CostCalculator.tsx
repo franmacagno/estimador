@@ -138,18 +138,20 @@ const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBloc
       </div>
 
       {isViable ? (
-      <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
-    <CheckCircle className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-    <p className="text-sm text-accent-foreground leading-relaxed">{resumenProyecto}</p>
-  </div>
-) : (
-  <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
-    <XCircle className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
-    <div className="text-sm text-accent-foreground leading-relaxed space-y-2">
-      <p>{resumenProyecto}</p>
+        <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
+          <CheckCircle className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+          <p className="text-sm text-accent-foreground leading-relaxed">{resumenProyecto}</p>
+        </div>
+      ) : (
+        <div className="bg-accent/50 rounded-xl p-4 flex items-start gap-3">
+          <XCircle className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
+          <div className="text-sm text-accent-foreground leading-relaxed space-y-2">
+            <p>{resumenProyecto}</p>
+          </div>
+        </div>
+      )}
     </div>
-  </div>
-) 
+  );
 };
 
 const CostCalculator = ({ onResult, resultRef }: Props) => {
