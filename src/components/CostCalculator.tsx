@@ -303,7 +303,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                   <SelectItem value="3">3</SelectItem>
                   <SelectItem value="4">4</SelectItem>
                   <SelectItem value="5">5</SelectItem>
-                  <SelectItem value="6">6+</SelectItem>
+                  <SelectItem value="default">No especificar</SelectItem>
                 </SelectContent>
               </Select>
             </div>
