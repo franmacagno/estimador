@@ -147,16 +147,9 @@ const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBloc
     <XCircle className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
     <div className="text-sm text-accent-foreground leading-relaxed space-y-2">
       <p>{resumenProyecto}</p>
-      {presupuestoFaltante > 0 && (
-        <p className="font-semibold">
-          Te faltan aproximadamente {formatUSD(presupuestoFaltante)} para alcanzar el proyecto recomendado.
-        </p>
-      )}
     </div>
   </div>
-)}
-    </div>
-  );
+) 
 };
 
 const CostCalculator = ({ onResult, resultRef }: Props) => {
@@ -164,7 +157,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
   const [sqm, setSqm] = useState("");
   const [budget, setBudget] = useState("");
   const [finishing, setFinishing] = useState<"basic" | "standard" | "premium">("standard");
-  const [personas, setPersonas] = useState("default");
+  const [personas, setPersonas] = useState("3");
   const [garage, setGarage] = useState("1");
   const [tipoConstructivo, setTipoConstructivo] = useState<"steel_frame" | "tradicional" | "comparar">("steel_frame");
 
@@ -187,7 +180,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
     console.log("tipoConstructivo", tipoConstructivo);
     console.log("sqm", sqm);
     console.log("budget", budget);
-    const personasNumber = personas === "default" ? 2 : Number(personas || 2);
+    const personasNumber = Number(personas || 1);
     const garageNumber = Number(garage || 0);
     const finishingApi = mapFinishingToApi(finishing);
 
@@ -303,7 +296,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
                   <SelectItem value="3">3</SelectItem>
                   <SelectItem value="4">4</SelectItem>
                   <SelectItem value="5">5</SelectItem>
-                  <SelectItem value="default">No especificar</SelectItem>
+                  <SelectItem value="6">6+</SelectItem>
                 </SelectContent>
               </Select>
             </div>
