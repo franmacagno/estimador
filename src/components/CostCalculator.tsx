@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Clock, Loader2, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbzzmrDSB698IcTlnOIGZC9QmBMrP7mwFRMWgkgk1kKUMSLQb8o5OUjUaXzNEldrOOerHg/exec";
+  "https://script.google.com/macros/s/AKfycbxMy-q3gc9vkjhJmjxPJxP2olVA5BY6x1aKIiHpI92sZwx4n5uK8vqtT1NTiZZv7xykoQ/exec";
 
 interface ApiResult {
   costo_total?: number;
