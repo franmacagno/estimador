@@ -151,12 +151,11 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
     if (!modoCalculo || !tipoConstructivo) return;
 
     // --- Payload base ---
-    const baseBody = {
+    const baseBody: Record<string, string | number> = {
       modo_calculo: modoCalculo,
       personas: Number(personas),
-      cochera: Number(cochera),
-      paquete_terminacion: paqueteTerminacion,
-      ...(modoCalculo === "m2" ? { m2: Number(inputM2) } : { presupuesto: Number(inputPresupuesto) }),
+      cochera: Number(garage),
+      paquete_terminacion: finishing,
     };
 
     if (modoCalculo === "m2") {
