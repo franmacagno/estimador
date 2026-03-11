@@ -293,7 +293,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
             </div>
             <div>
               <Label className="text-xs">Tipo de construcción</Label>
-              <Select value={tipoConstructivo} onValueChange={setTipoConstructivo}>
+              <Select value={tipoConstructivo} onValueChange={(v) => setTipoConstructivo(v as "steel_frame" | "tradicional" | "comparar")}>
                 <SelectTrigger className="mt-1 h-9 text-sm">
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
