@@ -40,6 +40,7 @@ interface ResultBlockProps {
   result: ApiResult;
   modoCalculo: string;
   budget: string;
+  inputM2?: string;
   label?: string;
 }
 
