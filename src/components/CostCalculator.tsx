@@ -335,7 +335,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
           <h3 className="text-lg font-bold text-card-foreground mb-5 text-center font-heading">
             Proyecto estimado para tu casa
           </h3>
-          <ResultBlock result={result} modoCalculo={modoCalculo} budget={budget} />
+          <ResultBlock result={result} modoCalculo={modoCalculo} budget={budget} inputM2={sqm} />
         </div>
       )}
 
