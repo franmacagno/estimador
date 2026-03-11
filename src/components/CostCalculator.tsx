@@ -94,8 +94,8 @@ const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBloc
       )}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-muted rounded-xl p-4 text-center">
-          <p className="text-xs text-muted-foreground mb-1">Superficie posible</p>
-          <p className="text-lg font-bold text-foreground">{result.m2_posibles} m²</p>
+          <p className="text-xs text-muted-foreground mb-1">{surfaceLabel}</p>
+          <p className="text-lg font-bold text-foreground">{surfaceValue} m²</p>
         </div>
         <div className="bg-muted rounded-xl p-4 text-center">
           <p className="text-xs text-muted-foreground mb-1">Presupuesto ingresado</p>
