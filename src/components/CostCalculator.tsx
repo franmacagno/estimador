@@ -40,10 +40,19 @@ interface ResultBlockProps {
   result: ApiResult;
   modoCalculo: string;
   budget: string;
+  inputM2?: string;
   label?: string;
 }
 
-const ResultBlock = ({ result, modoCalculo, budget, label }: ResultBlockProps) => {
+const ResultBlock = ({ result, modoCalculo, budget, inputM2, label }: ResultBlockProps) => {
+  // Determine surface value: prefer m2_totales from API, then m2_posibles, then user input
+  const surfaceValue = (result.m2_totales != null && result.m2_totales > 0)
+    ? result.m2_totales
+    : (result.m2_posibles != null && result.m2_posibles > 0)
+      ? result.m2_posibles
+      : (inputM2 ? parseFloat(inputM2) : 0);
+  const surfaceLabel = (result.m2_totales != null && result.m2_totales > 0) ? "Superficie total" : "Superficie posible";
+
   if (modoCalculo === "m2") {
     return (
       <div className="space-y-4">
@@ -56,8 +65,8 @@ const ResultBlock = ({ result, modoCalculo, budget, label }: ResultBlockProps) =
             <p className="text-lg font-bold text-foreground">{formatUSD(result.costo_total)}</p>
           </div>
           <div className="bg-muted rounded-xl p-4 text-center">
-            <p className="text-xs text-muted-foreground mb-1">{result.m2_totales ? "Superficie total" : "Superficie posible"}</p>
-            <p className="text-lg font-bold text-foreground">{result.m2_totales || result.m2_posibles} m²</p>
+            <p className="text-xs text-muted-foreground mb-1">{surfaceLabel}</p>
+            <p className="text-lg font-bold text-foreground">{surfaceValue} m²</p>
           </div>
           <div className="bg-muted rounded-xl p-4 text-center">
             <p className="text-xs text-muted-foreground mb-1">Tiempo estimado</p>
@@ -85,8 +94,8 @@ const ResultBlock = ({ result, modoCalculo, budget, label }: ResultBlockProps) =
       )}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-muted rounded-xl p-4 text-center">
-          <p className="text-xs text-muted-foreground mb-1">Superficie posible</p>
-          <p className="text-lg font-bold text-foreground">{result.m2_posibles} m²</p>
+          <p className="text-xs text-muted-foreground mb-1">{surfaceLabel}</p>
+          <p className="text-lg font-bold text-foreground">{surfaceValue} m²</p>
         </div>
         <div className="bg-muted rounded-xl p-4 text-center">
           <p className="text-xs text-muted-foreground mb-1">Presupuesto ingresado</p>
@@ -326,7 +335,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
           <h3 className="text-lg font-bold text-card-foreground mb-5 text-center font-heading">
             Proyecto estimado para tu casa
           </h3>
-          <ResultBlock result={result} modoCalculo={modoCalculo} budget={budget} />
+          <ResultBlock result={result} modoCalculo={modoCalculo} budget={budget} inputM2={sqm} />
         </div>
       )}
 
@@ -341,6 +350,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
               result={compareResults.steel_frame}
               modoCalculo={modoCalculo}
               budget={budget}
+              inputM2={sqm}
               label="Steel Frame"
             />
             <div className="border-t border-border" />
@@ -348,6 +358,7 @@ const CostCalculator = ({ onResult, resultRef }: Props) => {
               result={compareResults.tradicional}
               modoCalculo={modoCalculo}
               budget={budget}
+              inputM2={sqm}
               label="Tradicional"
             />
           </div>
