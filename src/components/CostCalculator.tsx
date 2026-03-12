@@ -104,6 +104,8 @@ const CostCalculator = ({ onResult }: Props) => {
           modoCalculo,
           budget,
           sqm,
+          tipoConstructivo,
+          finishing: mapFinishingToApi(finishing),
         });
       }
     } catch (err) {
