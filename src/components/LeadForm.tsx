@@ -4,18 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, CheckCircle, AlertTriangle } from "lucide-react";
+import type { CalculatorResult } from "@/components/CostCalculator";
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxMy-q3gc9vkjhJmjxPJxP2olVA5BY6x1aKIiHpI92sZwx4n5uK8vqtT1NTiZZv7xykoQ/exec";
 
 interface LeadFormProps {
-  m2: string;
-  tipoObra: string;
-  categoria: string;
-  costoEstimado: number;
+  calcResult: CalculatorResult;
 }
 
-const LeadForm = ({ m2, tipoObra, categoria, costoEstimado }: LeadFormProps) => {
+const LeadForm = ({ calcResult }: LeadFormProps) => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -33,29 +31,43 @@ const LeadForm = ({ m2, tipoObra, categoria, costoEstimado }: LeadFormProps) => 
     setError(false);
 
     try {
+      const singleResult = calcResult.single;
+      const compareResult = calcResult.compare;
+
       const payload = {
-        tipo: "lead",
-        timestamp: new Date().toISOString(),
+        action: "save_lead",
         nombre: nombre.trim(),
         email: email.trim(),
         telefono: telefono.trim(),
         ciudad: ciudad.trim(),
         mensaje: mensaje.trim(),
-        m2,
-        tipo_obra: tipoObra,
-        categoria,
-        costo_estimado: costoEstimado,
+        modo_calculo: calcResult.modoCalculo,
+        m2: calcResult.sqm,
+        presupuesto: calcResult.budget,
+        tipo_obra: calcResult.tipoConstructivo,
+        categoria: calcResult.finishing,
+        resultado_tipo: calcResult.type === "compare" ? "comparacion" : "unico",
+        costo_estimado: singleResult?.costo_total ?? "",
+        tiempo_estimado: singleResult?.tiempo_obra ?? "",
+        costo_steel_frame: compareResult?.steel_frame?.costo_total ?? "",
+        tiempo_steel_frame: compareResult?.steel_frame?.tiempo_obra ?? "",
+        costo_tradicional: compareResult?.tradicional?.costo_total ?? "",
+        tiempo_tradicional: compareResult?.tradicional?.tiempo_obra ?? "",
+        fuente: "landing",
+        estado: "nuevo",
       };
 
       console.log("Lead payload", payload);
 
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "text/plain" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("Webhook error");
+      const data = await res.json();
+
+      if (!data.success) throw new Error("Webhook returned failure");
 
       setSuccess(true);
       setNombre("");

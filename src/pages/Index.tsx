@@ -145,12 +145,7 @@ const Index = () => {
           )}
           {/* Lead capture form */}
           <div className="mt-6">
-            <LeadForm
-              m2={calcResult.sqm || String(calcResult.single?.m2_totales ?? calcResult.single?.m2_posibles ?? "")}
-              tipoObra={calcResult.tipoConstructivo}
-              categoria={calcResult.finishing}
-              costoEstimado={calcResult.type === "single" ? (calcResult.single?.costo_total ?? 0) : (calcResult.compare?.steel_frame?.costo_total ?? 0)}
-            />
+            <LeadForm calcResult={calcResult} />
           </div>
         </section>
       )}
