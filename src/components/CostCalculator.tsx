@@ -31,6 +31,7 @@ export interface CalculatorResult {
   sqm: string;
   tipoConstructivo: "steel_frame" | "tradicional" | "comparar";
   finishing: string;
+  rawResponse: ApiResult | CompareApiResult;
 }
 
 interface Props {
