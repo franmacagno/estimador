@@ -61,11 +61,14 @@ const LeadForm = ({ calcResult }: LeadFormProps) => {
 
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain" },
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
+      console.log("Status de respuesta:", res.status);
+      const responseText = await res.text();
+      console.log("Texto de respuesta:", responseText);
+      const data = JSON.parse(responseText);
 
       if (!data.success) throw new Error("Webhook returned failure");
 
