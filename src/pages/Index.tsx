@@ -100,92 +100,92 @@ const Index = () => {
       </section>
 
       {/* Results section - full width below hero */}
-      {calcResult && (
-        <section ref={resultRef} className="max-w-6xl mx-auto px-6 pb-10">
-          {calcResult.type === "single" && calcResult.single && (
-            <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
+      {calcResult &&
+      <section ref={resultRef} className="max-w-6xl mx-auto px-6 pb-10">
+          {calcResult.type === "single" && calcResult.single &&
+        <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
               <h3 className="text-lg font-bold text-card-foreground mb-5 text-center font-heading">
                 Proyecto estimado para tu casa
               </h3>
               <ResultBlock
-                result={calcResult.single}
-                modoCalculo={calcResult.modoCalculo}
-                budget={calcResult.budget}
-                inputM2={calcResult.sqm}
-              />
+            result={calcResult.single}
+            modoCalculo={calcResult.modoCalculo}
+            budget={calcResult.budget}
+            inputM2={calcResult.sqm} />
+          
             </div>
-          )}
+        }
 
-          {calcResult.type === "compare" && calcResult.compare && (
-            <div>
+          {calcResult.type === "compare" && calcResult.compare &&
+        <div>
               <h3 className="text-lg font-bold text-card-foreground mb-5 text-center font-heading">
                 Comparación de proyectos
               </h3>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
                   <ResultBlock
-                    result={calcResult.compare.steel_frame}
-                    modoCalculo={calcResult.modoCalculo}
-                    budget={calcResult.budget}
-                    inputM2={calcResult.sqm}
-                    label="Steel Frame"
-                  />
+                result={calcResult.compare.steel_frame}
+                modoCalculo={calcResult.modoCalculo}
+                budget={calcResult.budget}
+                inputM2={calcResult.sqm}
+                label="Steel Frame" />
+              
                 </div>
                 <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
                   <ResultBlock
-                    result={calcResult.compare.tradicional}
-                    modoCalculo={calcResult.modoCalculo}
-                    budget={calcResult.budget}
-                    inputM2={calcResult.sqm}
-                    label="Tradicional"
-                  />
+                result={calcResult.compare.tradicional}
+                modoCalculo={calcResult.modoCalculo}
+                budget={calcResult.budget}
+                inputM2={calcResult.sqm}
+                label="Tradicional" />
+              
                 </div>
               </div>
             </div>
-          )}
+        }
           {/* Lead capture form */}
           <div className="mt-6">
             <LeadForm calcResult={calcResult} />
           </div>
         </section>
-      )}
+      }
 
       {/* Why estimate section */}
       <section className="max-w-4xl mx-auto px-6 pb-20">
-        <div className="bg-accent/50 border border-border rounded-3xl p-10 flex flex-col md:flex-row items-center gap-8">
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold text-foreground font-heading mb-3">¿Por qué estimar antes de construir?</h2>
-            <p className="text-muted-foreground mb-4">
-              Conocer el costo aproximado te permite planificar mejor, comparar presupuestos de profesionales y tomar decisiones informadas antes de comenzar tu obra.
-            </p>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" /> Planificá tu inversión con anticipación</li>
-              <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" /> Compará opciones de construcción</li>
-              <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" /> Evitá sorpresas en el presupuesto</li>
-            </ul>
-          </div>
-          <div className="flex-shrink-0 w-48 h-48 relative lg:hidden">
-            <div className="absolute inset-0 bg-primary/10 rounded-3xl rotate-6" />
-            <div className="absolute inset-2 bg-primary/15 rounded-2xl -rotate-3" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg width="100" height="100" viewBox="0 0 100 100" fill="none" className="drop-shadow-sm">
-                <rect x="20" y="45" width="60" height="40" rx="4" className="fill-primary/20 stroke-primary" strokeWidth="2" />
-                <polygon points="50,15 85,45 15,45" className="fill-primary/15 stroke-primary" strokeWidth="2" strokeLinejoin="round" />
-                <rect x="40" y="60" width="16" height="25" rx="2" className="fill-primary/30 stroke-primary" strokeWidth="1.5" />
-                <rect x="25" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5" />
-                <rect x="62" y="55" width="10" height="10" rx="1" className="fill-accent stroke-primary" strokeWidth="1.5" />
-              </svg>
-            </div>
-          </div>
-        </div>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
       </section>
 
       {/* Footer */}
       <footer className="text-center py-12 text-sm text-muted-foreground">
         © 2026 BuildCost. Esta es una herramienta de estimación con fines de referencia.
       </footer>
-    </div>
-  );
+    </div>);
+
 };
 
 export default Index;
