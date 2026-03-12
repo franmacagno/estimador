@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Calculator, Home, Building2, Ruler, Star } from "lucide-react";
 import CostCalculator, { type CalculatorResult } from "@/components/CostCalculator";
 import ResultBlock from "@/components/ResultBlock";
+import LeadForm from "@/components/LeadForm";
 
 const Index = () => {
   const [calcResult, setCalcResult] = useState<CalculatorResult | null>(null);
@@ -142,6 +143,15 @@ const Index = () => {
               </div>
             </div>
           )}
+          {/* Lead capture form */}
+          <div className="mt-6">
+            <LeadForm
+              m2={calcResult.sqm || String(calcResult.single?.m2_totales ?? calcResult.single?.m2_posibles ?? "")}
+              tipoObra={calcResult.tipoConstructivo}
+              categoria={calcResult.finishing}
+              costoEstimado={calcResult.type === "single" ? (calcResult.single?.costo_total ?? 0) : (calcResult.compare?.steel_frame?.costo_total ?? 0)}
+            />
+          </div>
         </section>
       )}
 

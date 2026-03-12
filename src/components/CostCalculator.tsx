@@ -29,6 +29,8 @@ export interface CalculatorResult {
   modoCalculo: "m2" | "presupuesto";
   budget: string;
   sqm: string;
+  tipoConstructivo: "steel_frame" | "tradicional" | "comparar";
+  finishing: string;
 }
 
 interface Props {
@@ -92,6 +94,8 @@ const CostCalculator = ({ onResult }: Props) => {
           modoCalculo,
           budget,
           sqm,
+          tipoConstructivo,
+          finishing: mapFinishingToApi(finishing),
         });
       } else {
         onResult?.({
@@ -100,6 +104,8 @@ const CostCalculator = ({ onResult }: Props) => {
           modoCalculo,
           budget,
           sqm,
+          tipoConstructivo,
+          finishing: mapFinishingToApi(finishing),
         });
       }
     } catch (err) {
