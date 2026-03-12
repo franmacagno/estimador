@@ -31,6 +31,7 @@ export interface CalculatorResult {
   sqm: string;
   tipoConstructivo: "steel_frame" | "tradicional" | "comparar";
   finishing: string;
+  rawResponse: ApiResult | CompareApiResult;
 }
 
 interface Props {
@@ -96,6 +97,7 @@ const CostCalculator = ({ onResult }: Props) => {
           sqm,
           tipoConstructivo,
           finishing: mapFinishingToApi(finishing),
+          rawResponse: response,
         });
       } else {
         onResult?.({
@@ -106,6 +108,7 @@ const CostCalculator = ({ onResult }: Props) => {
           sqm,
           tipoConstructivo,
           finishing: mapFinishingToApi(finishing),
+          rawResponse: response,
         });
       }
     } catch (err) {
