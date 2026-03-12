@@ -143,6 +143,15 @@ const Index = () => {
               </div>
             </div>
           )}
+          {/* Lead capture form */}
+          <div className="mt-6">
+            <LeadForm
+              m2={calcResult.sqm || (calcResult.type === "single" ? String(calcResult.single?.m2_totales ?? calcResult.single?.m2_posibles ?? "") : "")}
+              tipoObra={calcResult.type === "compare" ? "comparar" : (calcResult.type === "single" ? (calcResult.single?.resumen_proyecto?.toLowerCase().includes("steel") ? "steel_frame" : "tradicional") : "")}
+              categoria={calcResult.modoCalculo === "m2" ? "por_m2" : "por_presupuesto"}
+              costoEstimado={calcResult.type === "single" ? (calcResult.single?.costo_total ?? 0) : (calcResult.compare?.steel_frame?.costo_total ?? 0)}
+            />
+          </div>
         </section>
       )}
 
