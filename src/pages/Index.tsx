@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Calculator, Home, Building2, Ruler, Star } from "lucide-react";
 import CostCalculator, { type CalculatorResult } from "@/components/CostCalculator";
 import ResultBlock from "@/components/ResultBlock";
+import LeadForm from "@/components/LeadForm";
 
 const Index = () => {
   const [calcResult, setCalcResult] = useState<CalculatorResult | null>(null);
