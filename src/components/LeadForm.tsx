@@ -31,32 +31,32 @@ const LeadForm = ({ calcResult }: LeadFormProps) => {
     setError(false);
 
     try {
-      const singleResult = calcResult.single;
-      const compareResult = calcResult.compare;
+      const resultType = calcResult.type === "compare" ? "comparacion" : "simple";
 
       const payload = {
         action: "save_lead",
-        nombre: nombre.trim(),
-        email: email.trim(),
-        telefono: telefono.trim(),
-        ciudad: ciudad.trim(),
-        mensaje: mensaje.trim(),
-        modo_calculo: calcResult.modoCalculo,
-        m2: calcResult.sqm,
-        presupuesto: calcResult.budget,
-        tipo_obra: calcResult.tipoConstructivo,
-        categoria: calcResult.finishing,
-        resultado_tipo: calcResult.type === "compare" ? "comparacion" : "unico",
-        costo_estimado: singleResult?.costo_total ?? "",
-        tiempo_estimado: singleResult?.tiempo_obra ?? "",
-        costo_steel_frame: compareResult?.steel_frame?.costo_total ?? "",
-        tiempo_steel_frame: compareResult?.steel_frame?.tiempo_obra ?? "",
-        costo_tradicional: compareResult?.tradicional?.costo_total ?? "",
-        tiempo_tradicional: compareResult?.tradicional?.tiempo_obra ?? "",
+        nombre: nombre.trim() || "",
+        email: email.trim() || "",
+        telefono: telefono.trim() || "",
+        ciudad: ciudad.trim() || "",
+        mensaje: mensaje.trim() || "",
+        modo_calculo: calcResult.modoCalculo || "",
+        m2: calcResult.sqm || "",
+        presupuesto: calcResult.budget || "",
+        tipo_obra: calcResult.tipoConstructivo || "",
+        categoria: calcResult.finishing || "",
+        resultado_tipo: resultType,
+        costo_estimado: resultType === "simple" ? (calcResult.single?.costo_total || "") : "",
+        tiempo_estimado: resultType === "simple" ? (calcResult.single?.tiempo_obra || "") : "",
+        costo_steel_frame: resultType === "comparacion" ? (calcResult.compare?.steel_frame?.costo_total || "") : "",
+        tiempo_steel_frame: resultType === "comparacion" ? (calcResult.compare?.steel_frame?.tiempo_obra || "") : "",
+        costo_tradicional: resultType === "comparacion" ? (calcResult.compare?.tradicional?.costo_total || "") : "",
+        tiempo_tradicional: resultType === "comparacion" ? (calcResult.compare?.tradicional?.tiempo_obra || "") : "",
         fuente: "landing",
         estado: "nuevo",
       };
 
+      console.log("Calculator result", calcResult);
       console.log("Lead payload", payload);
 
       const res = await fetch(API_URL, {
