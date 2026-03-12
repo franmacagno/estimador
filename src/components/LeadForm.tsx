@@ -101,8 +101,11 @@ const LeadForm = ({ calcResult }: LeadFormProps) => {
   }
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
-      <h3 className="text-lg font-bold text-card-foreground mb-5 text-center font-heading">
+    <div className="relative rounded-2xl border-2 border-primary/40 bg-gradient-to-br from-accent via-card to-accent p-6 shadow-md ring-1 ring-primary/10">
+      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-semibold px-4 py-1 rounded-full shadow-sm">
+        ¡No te lo pierdas!
+      </div>
+      <h3 className="text-lg font-bold text-card-foreground mb-5 text-center font-heading mt-2">
         Recibí este cálculo + asesoramiento de un arquitecto
       </h3>
 
