@@ -97,6 +97,7 @@ const CostCalculator = ({ onResult }: Props) => {
           sqm,
           tipoConstructivo,
           finishing: mapFinishingToApi(finishing),
+          rawResponse: response,
         });
       } else {
         onResult?.({
@@ -107,6 +108,7 @@ const CostCalculator = ({ onResult }: Props) => {
           sqm,
           tipoConstructivo,
           finishing: mapFinishingToApi(finishing),
+          rawResponse: response,
         });
       }
     } catch (err) {
