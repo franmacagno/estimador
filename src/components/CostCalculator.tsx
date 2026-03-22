@@ -123,7 +123,7 @@ const CostCalculator = ({ onResult }: Props) => {
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <Label className="text-xs">Modo de cálculo</Label>
+            <Label className="text-xs">Calcular en base a:</Label>
             <Select value={modoCalculo} onValueChange={(value) => setModoCalculo(value as "m2" | "presupuesto")}>
               <SelectTrigger className="mt-1 h-9 text-sm">
                 <SelectValue placeholder="Seleccionar" />
