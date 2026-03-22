@@ -38,8 +38,8 @@ const Index = () => {
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.1] mb-5 font-heading">
                 ¿Cuánto cuesta construir tu casa?
               </h1>
-              <p className="text-base text-muted-foreground max-w-md mb-8">
-                Calculalo en 30 segundos. Configurá tu casa y obtené un costo estimado de construcción.
+              <p className="text-base text-muted-foreground max-w-md mb-8">Calculalo en 30 segundos. Configurá tu proyecto y obtené un costo estimado de construcción.
+
               </p>
 
               {/* Mini feature list */}

@@ -7,14 +7,14 @@ import { Loader2, AlertTriangle } from "lucide-react";
 import type { ApiResult, CompareApiResult } from "@/components/ResultBlock";
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbxMy-q3gc9vkjhJmjxPJxP2olVA5BY6x1aKIiHpI92sZwx4n5uK8vqtT1NTiZZv7xykoQ/exec";
+"https://script.google.com/macros/s/AKfycbxMy-q3gc9vkjhJmjxPJxP2olVA5BY6x1aKIiHpI92sZwx4n5uK8vqtT1NTiZZv7xykoQ/exec";
 
 const fetchApi = async (body: Record<string, string | number>): Promise<ApiResult | CompareApiResult> => {
   console.log("API payload", body);
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "text/plain" },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   });
   if (!res.ok) throw new Error("API error");
   const json = await res.json();
@@ -25,7 +25,7 @@ const fetchApi = async (body: Record<string, string | number>): Promise<ApiResul
 export interface CalculatorResult {
   type: "single" | "compare";
   single?: ApiResult;
-  compare?: { steel_frame: ApiResult; tradicional: ApiResult };
+  compare?: {steel_frame: ApiResult;tradicional: ApiResult;};
   modoCalculo: "m2" | "presupuesto";
   budget: string;
   sqm: string;
@@ -64,7 +64,7 @@ const CostCalculator = ({ onResult }: Props) => {
       personas: personasNumber,
       cochera: garageNumber,
       paquete_terminacion: finishingApi,
-      tipo_constructivo: tipoConstructivo,
+      tipo_constructivo: tipoConstructivo
     };
 
     if (modoCalculo === "m2") {
@@ -84,10 +84,10 @@ const CostCalculator = ({ onResult }: Props) => {
       const response = await fetchApi(baseBody);
 
       if (
-        tipoConstructivo === "comparar" &&
-        "tipo_resultado" in response &&
-        response.tipo_resultado === "comparacion"
-      ) {
+      tipoConstructivo === "comparar" &&
+      "tipo_resultado" in response &&
+      response.tipo_resultado === "comparacion")
+      {
         onResult?.({
           type: "compare",
           compare: { steel_frame: response.steel_frame, tradicional: response.tradicional },
@@ -95,7 +95,7 @@ const CostCalculator = ({ onResult }: Props) => {
           budget,
           sqm,
           tipoConstructivo,
-          finishing: mapFinishingToApi(finishing),
+          finishing: mapFinishingToApi(finishing)
         });
       } else {
         onResult?.({
@@ -105,7 +105,7 @@ const CostCalculator = ({ onResult }: Props) => {
           budget,
           sqm,
           tipoConstructivo,
-          finishing: mapFinishingToApi(finishing),
+          finishing: mapFinishingToApi(finishing)
         });
       }
     } catch (err) {
@@ -118,7 +118,7 @@ const CostCalculator = ({ onResult }: Props) => {
 
   return (
     <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
-      <h2 className="text-xl font-bold text-card-foreground mb-5 text-center font-heading">Configurá tu casa</h2>
+      <h2 className="text-xl font-bold text-card-foreground mb-5 text-center font-heading">Coméntanos sobre tu proyecto</h2>
 
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
@@ -135,17 +135,17 @@ const CostCalculator = ({ onResult }: Props) => {
             </Select>
           </div>
 
-          {modoCalculo === "presupuesto" ? (
-            <div>
+          {modoCalculo === "presupuesto" ?
+          <div>
               <Label htmlFor="budget" className="text-xs">Presupuesto ($)</Label>
               <Input id="budget" type="number" placeholder="Ej: 90000" value={budget} onChange={(e) => setBudget(e.target.value)} className="mt-1 h-9 text-sm" />
-            </div>
-          ) : (
-            <div>
+            </div> :
+
+          <div>
               <Label htmlFor="sqm" className="text-xs">Metros cuadrados</Label>
               <Input id="sqm" type="number" placeholder="Ej: 120" value={sqm} onChange={(e) => setSqm(e.target.value)} className="mt-1 h-9 text-sm" />
             </div>
-          )}
+          }
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -212,27 +212,27 @@ const CostCalculator = ({ onResult }: Props) => {
         </div>
 
         <Button className="w-full py-5 text-sm mt-1" onClick={handleCalculate} disabled={loading}>
-          {loading ? (
-            <span className="flex items-center gap-2">
+          {loading ?
+          <span className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
               Calculando proyecto...
-            </span>
-          ) : (
-            "Ver proyecto estimado"
-          )}
+            </span> :
+
+          "Ver proyecto estimado"
+          }
         </Button>
       </div>
 
-      {error && (
-        <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-5 mt-5 text-center">
+      {error &&
+      <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-5 mt-5 text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
             <AlertTriangle className="h-5 w-5 text-destructive" />
             <p className="text-sm font-semibold text-destructive">No pudimos calcular el proyecto. Intentá nuevamente.</p>
           </div>
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 };
 
 export default CostCalculator;
